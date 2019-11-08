@@ -1,8 +1,17 @@
 @import './variables';
 
 .node {
-    width: 50px;
-    height: 50px;
-    border: 1px solid black; 
+    width: 25px;
+    height: 25px;
+    border: 0.1px solid $node_border;
     background-color: $node_background;
+    box-sizing: border-box;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &.wall {
+        background-color: $node_wall;
+    }
 }
