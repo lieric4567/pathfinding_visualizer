@@ -1,0 +1,11 @@
+@mixin flexCenter($direction) {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: $direction;
+}
+
+@mixin noPointerSelect {
+    user-select: none;
+    pointer-events: none;
+}

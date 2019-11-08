@@ -1,0 +1,12 @@
+@import './variables';
+@import './mixins';
+
+.grid {
+    @include flexCenter(column);
+    user-select: none;
+}
+
+.row {
+    @include flexCenter(row);
+    user-select: none;
+}
