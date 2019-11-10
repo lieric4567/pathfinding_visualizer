@@ -6,10 +6,12 @@ const GLOBAL = {
   mouse_down: false
 };
 
-function App() {
-  return (
-    <Graph></Graph>
-  );
+class App extends React.Component {
+  render() {
+    return (
+      <Graph></Graph>
+    )
+  }
 }
 
 export default App; 

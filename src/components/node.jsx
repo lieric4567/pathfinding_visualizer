@@ -8,13 +8,14 @@ class Node extends React.Component {
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseOver = this.handleMouseOver.bind(this);
         this.handleMouseUp = this.handleMouseUp.bind(this);
-        this.state = {isWall: false};
+        this.state = {
+            wall: false
+        }
     }
 
     render() {
-        console.log('updating')
-        const {isWall} = this.state;
-        return isWall ? (<div className="node wall" 
+        const {wall} = this.state;
+        return wall ? (<div className="node wall" 
                           onMouseDown={this.handleMouseDown} 
                           onMouseOver={this.handleMouseOver}
                           onMouseUp={this.handleMouseUp}></div>
@@ -27,18 +28,17 @@ class Node extends React.Component {
 
     handleMouseDown(e) {
         GLOBAL.mouse_down = true; 
-        const {isWall} = this.state;
-        !isWall ? this.setState({isWall: true}) :
-        this.setState({isWall: false});
+        const {wall} = this.state; 
+        wall ? this.setState({wall: false}) : this.setState({wall: true});
+        this.props.onMD(this.props.x, this.props.y);
     }
 
     handleMouseOver(e) {
-        const {isWall} = this.state;
-        if(!isWall && GLOBAL.mouse_down) {
-            this.setState({isWall: true});
-        }
-        else if (isWall && GLOBAL.mouse_down) {
-            this.setState({isWall: false});
+        const {wall} = this.state;
+        const {x, y} = this.props;
+        if(GLOBAL.mouse_down) {
+            wall ? this.setState({wall: false}) : this.setState({wall: true});
+            this.props.onMO(x, y);
         }
     }
 

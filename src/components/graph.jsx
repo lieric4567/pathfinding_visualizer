@@ -2,32 +2,30 @@ import React from 'react';
 import '../css/node.css';
 import '../css/grid.css';
 import Node from './node';
+import GLOBAL from '../App';
 
 class Graph extends React.Component {
+
     constructor(props) {
         super(props);
+        this.handleMouseDown = this.handleMouseDown.bind(this);
+        this.handleMouseOver = this.handleMouseOver.bind(this);
         this.state = {
             x_size: 30,
             y_size: 50,
-            graph: [],
         };
+        this.graph = graphInit(this.state.x_size, this.state.y_size);
     }
-
-    componentDidMount() {
-        const graph = graphInit(this.state.x_size, this.state.y_size);
-        this.setState({graph: graph});
-    }
-
     render() {
-        const {graph, mouse_down} = this.state;
         return (
             <div className="grid">
-                {graph.map((row, row_num) => {
+                {this.graph.map((row, row_num) => {
                     return (
                         <div className="row" id={row_num} key={row_num}>
                             {row.map( (node, col_num) => {
                                 return (
-                                    <Node key={col_num} distance={node.distance} x={node.x} y={node.y}></Node>
+                                    <Node key={col_num} distance={node.distance} x={node.x} y={node.y}
+                                        onMD={this.handleMouseDown} onMO={this.handleMouseOver}></Node>
                                 )
                             })}
                         </div>
@@ -36,6 +34,17 @@ class Graph extends React.Component {
             </div>
         )
     }
+
+    handleMouseDown(row, col) {
+        this.graph[row][col].isWall = !this.graph[row][col].isWall;
+    }
+
+    handleMouseOver(row, col) {
+        if(GLOBAL.mouse_down) {
+            this.graph[row][col].isWall = !this.graph[row][col].isWall;
+            console.log(this.graph[row][col]);
+        }
+    }
 }
 
 const createNode = (row, col) => {
@@ -43,6 +52,7 @@ const createNode = (row, col) => {
         x: row,
         y: col,
         distance: Infinity,
+        isWall: false,
     };
 };
 
