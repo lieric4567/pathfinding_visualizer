@@ -9,4 +9,5 @@
 .row {
     @include flexCenter(row);
     user-select: none;
+    flex-wrap: nowrap;
 }

@@ -1,6 +1,6 @@
 .node {
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
   border: 0.1px solid #b4bcad;
   background-color: #f9deae;
   -webkit-box-sizing: border-box;
@@ -13,5 +13,13 @@
 
 .node.wall {
   background-color: #635846;
+}
+
+.node.start {
+  background-color: #27a56d;
+}
+
+.node.end {
+  background-color: #8e2a1b;
 }
 /*# sourceMappingURL=node.css.map */

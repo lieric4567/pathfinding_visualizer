@@ -36,5 +36,7 @@
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
 }
 /*# sourceMappingURL=grid.css.map */

@@ -11,10 +11,12 @@ class Graph extends React.Component {
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseOver = this.handleMouseOver.bind(this);
         this.state = {
-            x_size: 30,
-            y_size: 50,
+            y_size: 39,
+            x_size: 76,
+            startSet: false,
+            endSet: false,
         };
-        this.graph = graphInit(this.state.x_size, this.state.y_size);
+        this.graph = graphInit(this.state.y_size, this.state.x_size);
     }
     render() {
         return (
@@ -35,6 +37,10 @@ class Graph extends React.Component {
         )
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return false;
+    }
+
     handleMouseDown(row, col) {
         this.graph[row][col].isWall = !this.graph[row][col].isWall;
     }
@@ -42,7 +48,6 @@ class Graph extends React.Component {
     handleMouseOver(row, col) {
         if(GLOBAL.mouse_down) {
             this.graph[row][col].isWall = !this.graph[row][col].isWall;
-            console.log(this.graph[row][col]);
         }
     }
 }
