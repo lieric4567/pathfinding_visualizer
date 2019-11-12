@@ -5,7 +5,7 @@ import {Navbar, Button} from 'react-bootstrap';
 import {Nav} from 'react-bootstrap';
 import {NavDropdown} from 'react-bootstrap';
 import './css/navbar.css';
-
+import MinHeap from './algorithms/structs';
 
 const GLOBAL = {
   mouse_down: false
@@ -16,8 +16,11 @@ class App extends React.Component {
     super(props);
     this.algorithms = ['Djikstra', 'A*'];
     this.handleSelect = this.handleSelect.bind(this);
+    this.graph_ref = React.createRef();
+    this.handleVisualize = this.handleVisualize.bind(this);
     this.state = {
-      dropdownTitle: "Algorithms", 
+      dropdownTitle: "Algorithms",
+      algoIndex: null,
     };
   }
 
@@ -30,20 +33,27 @@ class App extends React.Component {
             <NavDropdown ref={this.dropdown} className="order-0 static-width" title={dropdownTitle} id="basic-nav-dropdown">
               <NavDropdown.Item eventKey="0" onSelect={this.handleSelect}>Djikstra</NavDropdown.Item>
               <NavDropdown.Item eventKey="1" onSelect={this.handleSelect}>A*</NavDropdown.Item>
-              <NavDropdown.Item>Something</NavDropdown.Item>
             </NavDropdown>
-            <Button className="mx-auto" variant="outline-success">Visualize</Button>
+            <Button className="mx-auto" variant="outline-success" onClick={this.handleVisualize}>Visualize</Button>
           </Nav>
         </Navbar>        
-        <Graph></Graph>
+        <Graph ref={this.graph_ref}></Graph>
       </div>
     )
   }
   
   handleSelect(key, e) {
     const newTitle = this.algorithms[parseInt(key)];
-    this.setState({dropdownTitle: newTitle}); 
+    this.setState({dropdownTitle: newTitle, algoIndex: parseInt(key)}); 
   }
+
+  handleVisualize(e) {
+    const props = {
+      algorithm: this.state.algoIndex,
+    }
+    this.graph_ref.current.runAlgorithm(props);
+  }
+
 }
 
 export default App; 

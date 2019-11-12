@@ -17,6 +17,7 @@ class Graph extends React.Component {
             endSet: false,
         };
         this.graph = graphInit(this.state.y_size, this.state.x_size);
+        this.ref_array = nodeRefInit(this.state.y_size, this.state.x_size);
     }
     render() {
         return (
@@ -26,7 +27,7 @@ class Graph extends React.Component {
                         <div className="row" id={row_num} key={row_num}>
                             {row.map( (node, col_num) => {
                                 return (
-                                    <Node key={col_num} distance={node.distance} x={node.x} y={node.y}
+                                    <Node ref={this.ref_array[row_num][col_num]} key={col_num} distance={node.distance} x={node.x} y={node.y}
                                         onMD={this.handleMouseDown} onMO={this.handleMouseOver}></Node>
                                 )
                             })}
@@ -50,6 +51,11 @@ class Graph extends React.Component {
             this.graph[row][col].isWall = !this.graph[row][col].isWall;
         }
     }
+
+    runAlgorithm(props) {
+        console.log('running algorithms');
+
+    }
 }
 
 const createNode = (row, col) => {
@@ -70,6 +76,17 @@ const graphInit = (rows, cols) => {
         }
     }
     return graph;
+}
+
+const nodeRefInit = (rows, cols) => {
+    const ref_array = [];
+    for(let row = 0; row < rows; row++){
+        ref_array[row] = [];
+        for (let col = 0; col < cols; col++){
+            ref_array[row].push(React.createRef());
+        }
+    }
+    return ref_array;
 }
 
 export default Graph;
