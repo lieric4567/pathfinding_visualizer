@@ -3,9 +3,10 @@
 .node {
     width: 24px;
     height: 24px;
-    border: 0.1px solid $node_border;
+    border: 1px solid $node_border;
     background-color: $node_background;
     box-sizing: border-box;
+    border-radius: 2px;
 
     &:hover {
         cursor: pointer;
@@ -21,5 +22,9 @@
 
     &.end {
         background-color: $end_clr;
+    }
+
+    &.path {
+        background-color: $path_clr;
     }
 }

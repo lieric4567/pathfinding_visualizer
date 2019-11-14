@@ -1,10 +1,11 @@
 .node {
   width: 24px;
   height: 24px;
-  border: 0.1px solid #b4bcad;
-  background-color: #f9deae;
+  border: 1px solid #b4bcad;
+  background-color: #b5edaf;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  border-radius: 2px;
 }
 
 .node:hover {
@@ -12,7 +13,7 @@
 }
 
 .node.wall {
-  background-color: #635846;
+  background-color: black;
 }
 
 .node.start {
@@ -21,5 +22,9 @@
 
 .node.end {
   background-color: #8e2a1b;
+}
+
+.node.path {
+  background-color: #d9e074;
 }
 /*# sourceMappingURL=node.css.map */

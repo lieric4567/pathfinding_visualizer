@@ -20,7 +20,7 @@ class MinHeap {
         this.array.push(obj);
         if(this.array.length > 2) {
             let index = this.array.length - 1;
-            while( this.comparator(this.array[index], this.array[Math.floor(index/2)]) ){
+            while( this.comparator(this.array[index].priority, this.array[Math.floor(index/2)].priority) ){
                 //swap
                 if(index >= 1) {
                     [this.array[index], this.array[Math.floor(index/2)]] = [this.array[Math.floor(index/2)], this.array[index]];
@@ -39,28 +39,24 @@ class MinHeap {
         //delete min
         //first swap root and last node.
         [this.array[1], this.array[this.array.length - 1]] = [this.array[this.array.length - 1], this.array[1]];
-        let ret = this.array.pop();
+        let ret = this.array.pop().obj;
         let index = 1;
         this.sinkDown(index);
         return ret;
     }
 
     sinkDown(cur) {
-        console.log('sinking');
         let smallest = cur;
         let left = 2 * cur;
         let right = 2 * cur + 1; 
-        console.log(smallest, left, right);
-        console.log(this.comparator(this.array[smallest], this.array[left]));
-        if(left < this.array.length && this.comparator(this.array[left], this.array[smallest]) ) {
+        if(left < this.array.length && this.comparator(this.array[left].priority, this.array[smallest].priority) ) {
             smallest = left;
         }
-        if(right < this.array.length && this.comparator(this.array[right], this.array[smallest]) ) {
+        if(right < this.array.length && this.comparator(this.array[right].priority, this.array[smallest].priority) ) {
             smallest = right;
         }
         if(smallest !== cur) {
             [this.array[cur], this.array[smallest]] = [this.array[smallest], this.array[cur]];
-            console.log('hi');
             this.sinkDown(smallest);
         }
     }
@@ -70,7 +66,7 @@ class MinHeap {
     }
 
     top = () => {
-        return this.array[1];
+        return this.array[1].obj;
     }
 
     isEmpty = () => {
@@ -87,12 +83,13 @@ class MinHeap {
 }
 
 class PriorityQueue {
-    constructor(comparator) {
-        this.heap = new MinHeap(comparator);
+    constructor() {
+        this.heap = new MinHeap();
     }
 
-    enqueue = (obj) => {
-        this.heap.insert(obj);
+    enqueue = (obj, priority) => {
+
+        this.heap.insert({obj: obj, priority: priority});
     }
 
     dequeue = (obj) => {
@@ -109,5 +106,9 @@ class PriorityQueue {
 
     front = () => {
         return this.heap.top();
+    }
+
+    display = () => {
+        this.heap.display();
     }
 }

@@ -5,10 +5,11 @@ import {Navbar, Button} from 'react-bootstrap';
 import {Nav} from 'react-bootstrap';
 import {NavDropdown} from 'react-bootstrap';
 import './css/navbar.css';
-import MinHeap from './algorithms/structs';
 
 const GLOBAL = {
-  mouse_down: false
+  mouse_down: false,
+  start: [0, 0],
+  end: [8, 75]
 };
 
 class App extends React.Component {

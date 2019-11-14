@@ -3,6 +3,7 @@ import '../css/node.css';
 import '../css/grid.css';
 import Node from './node';
 import GLOBAL from '../App';
+import {Algorithms, Animate} from '../algorithms/algorithm';
 
 class Graph extends React.Component {
 
@@ -52,18 +53,22 @@ class Graph extends React.Component {
         }
     }
 
-    runAlgorithm(props) {
-        console.log('running algorithms');
-
+    runAlgorithm() {
+        const algos = new Algorithms();
+        const shortest = algos.run_djikstra(this.graph, this.graph[0][0], this.graph[38][75]);
+        console.log(this.ref_array[0][0].current);
     }
 }
 
 const createNode = (row, col) => {
     return {
-        x: row,
-        y: col,
+        y: row,
+        x: col,
+        length: 1,
         distance: Infinity,
         isWall: false,
+        visited: false,
+        prev: null,
     };
 };
 

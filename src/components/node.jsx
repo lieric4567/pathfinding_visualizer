@@ -32,7 +32,7 @@ class Node extends React.Component {
         GLOBAL.mouse_down = true; 
         const {wall, isStart, isEnd} = this.state; 
         wall && !isStart && !isEnd ? this.setState({wall: false}) : this.setState({wall: true});
-        this.props.onMD(this.props.x, this.props.y);
+        this.props.onMD(this.props.y, this.props.x);
     }
 
     handleMouseOver(e) {
@@ -40,7 +40,7 @@ class Node extends React.Component {
         const {x, y} = this.props;
         if(GLOBAL.mouse_down) {
             wall && !isStart && !isEnd ? this.setState({wall: false}) : this.setState({wall: true});
-            this.props.onMO(x, y);
+            this.props.onMO(y, x);
         }
     }
 
