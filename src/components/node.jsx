@@ -8,6 +8,7 @@ class Node extends React.Component {
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseOver = this.handleMouseOver.bind(this);
         this.handleMouseUp = this.handleMouseUp.bind(this);
+        this.div_ref = React.createRef();
         this.state = {
             wall: false,
             isStart: false,
@@ -16,13 +17,14 @@ class Node extends React.Component {
     }
 
     render() {
+        console.log('rerendering');
         const {wall, isStart, isEnd} = this.state;
-        return wall && !isStart && !isEnd ? (<div className="node wall" 
+        return wall && !isStart && !isEnd ? (<div ref={this.div_ref} className="node wall" 
                           onMouseDown={this.handleMouseDown} 
                           onMouseOver={this.handleMouseOver}
                           onMouseUp={this.handleMouseUp}></div>
         ) : (
-        <div className="node"
+        <div ref={this.div_ref} className="node"
             onMouseDown={this.handleMouseDown} 
             onMouseOver={this.handleMouseOver}
             onMouseUp={this.handleMouseUp}></div>);

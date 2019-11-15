@@ -3,7 +3,7 @@ import '../css/node.css';
 import '../css/grid.css';
 import Node from './node';
 import GLOBAL from '../App';
-import {Algorithms, Animate} from '../algorithms/algorithm';
+import {Algorithms, Heuristic} from '../algorithms/algorithm';
 
 class Graph extends React.Component {
 
@@ -20,6 +20,7 @@ class Graph extends React.Component {
         this.graph = graphInit(this.state.y_size, this.state.x_size);
         this.ref_array = nodeRefInit(this.state.y_size, this.state.x_size);
     }
+
     render() {
         return (
             <div className="grid">
@@ -28,7 +29,7 @@ class Graph extends React.Component {
                         <div className="row" id={row_num} key={row_num}>
                             {row.map( (node, col_num) => {
                                 return (
-                                    <Node ref={this.ref_array[row_num][col_num]} key={col_num} distance={node.distance} x={node.x} y={node.y}
+                                    <Node ref={this.ref_array[row_num][col_num]} key={col_num} x={node.x} y={node.y}
                                         onMD={this.handleMouseDown} onMO={this.handleMouseOver}></Node>
                                 )
                             })}
@@ -55,9 +56,21 @@ class Graph extends React.Component {
 
     runAlgorithm() {
         const algos = new Algorithms();
-        const shortest = algos.run_djikstra(this.graph, this.graph[0][0], this.graph[38][75]);
-        console.log(this.ref_array[0][0].current);
+        const h = new Heuristic();
+        const shortest = algos.aStar(this.graph, this.graph[0][0], this.graph[38][75], h.euclidian);
+        shortest.animate(this.ref_array);
     }
+
+    clear= ()=> {
+        const {x_size, y_size} = this.state; 
+        this.graph = graphInit(y_size, x_size);
+        for(const row of this.ref_array) {
+            for(const node of row) {
+                node.current.div_ref.current.classList.remove('path');
+                node.current.setState({wall: false, isStart: false, isEnd: false});
+            }
+        }
+    };
 }
 
 const createNode = (row, col) => {

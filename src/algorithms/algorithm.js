@@ -1,11 +1,12 @@
 import {PriorityQueue} from './structs';
 import GLOBAL from '../App';
-export {Algorithms, Animate};
+export {Algorithms, Animate, Heuristic};
 
 class Algorithms {
 
     run_djikstra(graph, start, end) { 
         const visited = [];
+        let shortest = null; 
         const q = new PriorityQueue();
         start.distance = 0;
         
@@ -13,7 +14,11 @@ class Algorithms {
         q.enqueue(start, start.distance);
         while(!q.isEmpty()) {
             const node = q.dequeue();
-            if (node === end) return back_trace(node); 
+            visited.push(node);
+            if (node === end) {
+                shortest = back_trace(node); 
+                break;
+            }
 
             let neighbors = get_neighbor(graph, node);
             for (const neighbor of neighbors) {
@@ -26,15 +31,73 @@ class Algorithms {
                 }
             }
         }
-        q.display();
+        
+        return new Animate(visited, shortest);
     }
+
+    aStar = (graph, start, end, heuristic) => {
+        /* Runs A* with the provided heuristic funtion */
+        const q = new PriorityQueue();
+        const visited = [];
+        let shortest = null;
+        start.distance = 0 + heuristic(start, end);
+        start.visited = true;
+        q.enqueue(start, start.distance);
+
+        while(!q.isEmpty()) {
+            const node = q.dequeue();
+            if(node === end) {
+                shortest = back_trace(node);
+                break;
+            }
+            visited.push(node);
+            
+            const neighbors = get_neighbor(graph, node);
+            for(const neighbor of neighbors) {
+                const dist = node.distance + neighbor.length + heuristic(neighbor, end);
+                if (dist < neighbor.distance) {
+                    neighbor.distance = dist;
+                    neighbor.prev = node;
+                    neighbor.visited = true;
+                    q.enqueue(neighbor, neighbor.distance);
+                }
+            }
+        }
+
+        return new Animate(visited, shortest);
+    };
 }
 
 class Animate {
-    constructor (animate, shortest_path) {
-        this.animate = animate;
+    constructor (visited , shortest_path) {
+        this.visited = visited;
         this.shortest_path = shortest_path;
     }
+
+    animate = (ref)=> {
+        if(this.shortest_path != null) {
+            this.animate_shortest(ref); 
+        }
+    };
+
+    animate_visited = (visisted, ref)=> {
+        
+    };
+
+    animate_shortest = (ref) => {
+        for (const node of this.shortest_path) {
+            const {x, y} = node;
+            ref[y][x].current.div_ref.current.classList.toggle('path');
+        }
+    };
+}
+
+class Heuristic {
+    
+    euclidian = (start, end) => {
+        return Math.sqrt( ( Math.pow((end.x - start.x), 2) + Math.pow((end.y - start.y), 2) ) );
+    }
+
 }
 
 const get_neighbor = (graph, node) => {

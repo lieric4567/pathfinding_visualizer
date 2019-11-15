@@ -19,6 +19,7 @@ class App extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.graph_ref = React.createRef();
     this.handleVisualize = this.handleVisualize.bind(this);
+    this.handleClear = this.handleClear.bind(this);
     this.state = {
       dropdownTitle: "Algorithms",
       algoIndex: null,
@@ -36,6 +37,7 @@ class App extends React.Component {
               <NavDropdown.Item eventKey="1" onSelect={this.handleSelect}>A*</NavDropdown.Item>
             </NavDropdown>
             <Button className="mx-auto" variant="outline-success" onClick={this.handleVisualize}>Visualize</Button>
+            <Button className="mx-auto" variant="outline-success" onClick={this.handleClear}>Clear</Button>
           </Nav>
         </Navbar>        
         <Graph ref={this.graph_ref}></Graph>
@@ -53,6 +55,10 @@ class App extends React.Component {
       algorithm: this.state.algoIndex,
     }
     this.graph_ref.current.runAlgorithm(props);
+  }
+
+  handleClear(e) {
+    this.graph_ref.current.clear();
   }
 
 }
