@@ -6,12 +6,6 @@ import {Nav} from 'react-bootstrap';
 import {NavDropdown} from 'react-bootstrap';
 import './css/navbar.css';
 
-const GLOBAL = {
-  mouse_down: false,
-  start: [0, 0],
-  end: [8, 75]
-};
-
 class App extends React.Component {
   constructor(props){
     super(props);
@@ -19,9 +13,9 @@ class App extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.graph_ref = React.createRef();
     this.handleVisualize = this.handleVisualize.bind(this);
-    this.handleClear = this.handleClear.bind(this);
+    this.handleClear = this.handleClear.bind(this); 
     this.state = {
-      dropdownTitle: "Algorithms",
+      dropdownTitle: "Djikstra",
       algoIndex: null,
     };
   }
@@ -33,7 +27,7 @@ class App extends React.Component {
         <Navbar bg="light" expand="lg">
           <Nav variant="row">
             <NavDropdown ref={this.dropdown} className="order-0 static-width" title={dropdownTitle} id="basic-nav-dropdown">
-              <NavDropdown.Item eventKey="0" onSelect={this.handleSelect}>Djikstra</NavDropdown.Item>
+              <NavDropdown.Item active eventKey="0" onSelect={this.handleSelect}>Djikstra</NavDropdown.Item>
               <NavDropdown.Item eventKey="1" onSelect={this.handleSelect}>A*</NavDropdown.Item>
             </NavDropdown>
             <Button className="mx-auto" variant="outline-success" onClick={this.handleVisualize}>Visualize</Button>
@@ -51,17 +45,21 @@ class App extends React.Component {
   }
 
   handleVisualize(e) {
-    const props = {
-      algorithm: this.state.algoIndex,
+    console.log(window.GLOBAL);
+    if(!window.GLOBAL.animate) {
+      const props = {
+        algorithm: this.state.algoIndex,
+      }
+      this.graph_ref.current.runAlgorithm(props);
     }
-    this.graph_ref.current.runAlgorithm(props);
   }
 
   handleClear(e) {
-    this.graph_ref.current.clear();
+    if(!window.GLOBAL.animate) {
+      this.graph_ref.current.clear();
+    }
   }
 
 }
 
 export default App; 
-export {GLOBAL};

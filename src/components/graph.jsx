@@ -2,13 +2,14 @@ import React from 'react';
 import '../css/node.css';
 import '../css/grid.css';
 import Node from './node';
-import GLOBAL from '../App';
 import {Algorithms, Heuristic} from '../algorithms/algorithm';
 
 class Graph extends React.Component {
 
     constructor(props) {
         super(props);
+        this.algos = new Algorithms();
+        this.h = new Heuristic();
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseOver = this.handleMouseOver.bind(this);
         this.state = {
@@ -49,16 +50,18 @@ class Graph extends React.Component {
     }
 
     handleMouseOver(row, col) {
-        if(GLOBAL.mouse_down) {
+        if(window.GLOBAL.mouse_down) {
             this.graph[row][col].isWall = !this.graph[row][col].isWall;
         }
     }
 
-    runAlgorithm() {
-        const algos = new Algorithms();
-        const h = new Heuristic();
-        const shortest = algos.aStar(this.graph, this.graph[0][0], this.graph[38][75], h.euclidian);
-        shortest.animate(this.ref_array);
+    runAlgorithm(props) {
+        if(window.GLOBAL.animated) {
+            this.clearVisual();
+        }
+        // const animate = algos.run_djikstra(this.graph, this.graph[0][0], this.graph[38][75])
+        let animate = this.algos.aStar(this.graph, this.graph[0][0], this.graph[38][75], this.h.euclidian);
+        animate.animate(this.ref_array);
     }
 
     clear= ()=> {
@@ -66,11 +69,29 @@ class Graph extends React.Component {
         this.graph = graphInit(y_size, x_size);
         for(const row of this.ref_array) {
             for(const node of row) {
+                node.current.div_ref.current.classList.remove('visited');
                 node.current.div_ref.current.classList.remove('path');
                 node.current.setState({wall: false, isStart: false, isEnd: false});
             }
         }
     };
+
+    clearVisual= () => {
+        for(const row of this.ref_array) {
+            for(const node of row) {
+                const {x, y} = node.current.props;
+                const temp = this.graph[y][x];
+                this.graph[y][x] = {
+                    ...temp,
+                    visited: false,
+                    prev: null,
+                    distance: Infinity
+                }
+                node.current.div_ref.current.classList.remove('visited');
+                node.current.div_ref.current.classList.remove('path');
+            }
+        }
+    }
 }
 
 const createNode = (row, col) => {

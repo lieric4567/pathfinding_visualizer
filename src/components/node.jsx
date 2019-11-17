@@ -1,6 +1,5 @@
 import React from 'react';
 import '../css/node.css';
-import GLOBAL from '../App';
 
 class Node extends React.Component {
     constructor(props) {
@@ -31,23 +30,27 @@ class Node extends React.Component {
     }
 
     handleMouseDown(e) {
-        GLOBAL.mouse_down = true; 
-        const {wall, isStart, isEnd} = this.state; 
-        wall && !isStart && !isEnd ? this.setState({wall: false}) : this.setState({wall: true});
-        this.props.onMD(this.props.y, this.props.x);
+        if (!window.GLOBAL.animate){
+            window.GLOBAL.mouse_down = true; 
+            const {wall, isStart, isEnd} = this.state; 
+            if(!wall && !isStart && !isEnd) this.setState({wall: true});
+            this.props.onMD(this.props.y, this.props.x);
+        }
     }
 
     handleMouseOver(e) {
         const {wall, isStart, isEnd} = this.state; 
         const {x, y} = this.props;
-        if(GLOBAL.mouse_down) {
-            wall && !isStart && !isEnd ? this.setState({wall: false}) : this.setState({wall: true});
+        if(window.GLOBAL.mouse_down && !window.GLOBAL.animate) {
+            if(!wall && !isStart && !isEnd) {
+            this.setState({wall: true});
             this.props.onMO(y, x);
+            }
         }
     }
 
     handleMouseUp(e) {
-        GLOBAL.mouse_down = false;
+        window.GLOBAL.mouse_down = false;
     }
     
 }

@@ -1,5 +1,4 @@
 import {PriorityQueue} from './structs';
-import GLOBAL from '../App';
 export {Algorithms, Animate, Heuristic};
 
 class Algorithms {
@@ -9,11 +8,13 @@ class Algorithms {
         let shortest = null; 
         const q = new PriorityQueue();
         start.distance = 0;
-        
-        start.visited = true;
+
         q.enqueue(start, start.distance);
         while(!q.isEmpty()) {
             const node = q.dequeue();
+            if (node.isWall) break;
+
+            start.visited = true;
             visited.push(node);
             if (node === end) {
                 shortest = back_trace(node); 
@@ -41,16 +42,19 @@ class Algorithms {
         const visited = [];
         let shortest = null;
         start.distance = 0 + heuristic(start, end);
-        start.visited = true;
-        q.enqueue(start, start.distance);
+        q.enqueue(start, heuristic(start, end));
 
         while(!q.isEmpty()) {
             const node = q.dequeue();
+
+            if (node.isWall) break;
+            start.visited = true;
+            visited.push(node);
+
             if(node === end) {
                 shortest = back_trace(node);
                 break;
             }
-            visited.push(node);
             
             const neighbors = get_neighbor(graph, node);
             for(const neighbor of neighbors) {
@@ -59,7 +63,7 @@ class Algorithms {
                     neighbor.distance = dist;
                     neighbor.prev = node;
                     neighbor.visited = true;
-                    q.enqueue(neighbor, neighbor.distance);
+                    q.enqueue(neighbor, heuristic(neighbor, end));
                 }
             }
         }
@@ -71,24 +75,49 @@ class Algorithms {
 class Animate {
     constructor (visited , shortest_path) {
         this.visited = visited;
-        this.shortest_path = shortest_path;
+        this.shortest = shortest_path;
     }
 
     animate = (ref)=> {
-        if(this.shortest_path != null) {
-            this.animate_shortest(ref); 
-        }
+        console.log(this.visited, this.shortest);
+        window.GLOBAL.animate = true;
+        this.animate_visited(ref);
     };
 
-    animate_visited = (visisted, ref)=> {
-        
+    animate_visited = (ref)=> {
+        let iter = 1;
+        for (const node of this.visited) {
+            const {x, y} = node;
+            setTimeout((ref) => {
+                console.log('animating')
+                ref.current.div_ref.current.classList.add('visited');
+            }, 5 * iter, ref[y][x]);
+            iter++;
+        }  
+        console.log(iter);
+        setTimeout((ref, func) => {
+            func(ref);
+        }, (5 * iter), ref, this.animate_shortest);
     };
 
     animate_shortest = (ref) => {
-        for (const node of this.shortest_path) {
-            const {x, y} = node;
-            ref[y][x].current.div_ref.current.classList.toggle('path');
+        console.log('shortest')
+        if(this.shortest == null) {
+            return; 
         }
+        let iter = 1;
+        for (const node of this.shortest) {
+            const {x, y} = node;
+            setTimeout((ref) => {
+                ref.current.div_ref.current.classList.add('path');
+            }, 15 * iter, ref[y][x]);
+            iter++;
+        }
+        
+        setTimeout(() => {
+            window.GLOBAL.animate = false;
+            window.GLOBAL.animated = true;
+        }, 15 * iter);
     };
 }
 

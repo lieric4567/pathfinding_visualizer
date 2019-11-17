@@ -14,6 +14,7 @@
 
     &.wall {
         background-color: $node_wall;
+        border-color: $node_wall;
     }
 
     &.start{
@@ -24,11 +25,33 @@
         background-color: $end_clr;
     }
 
-    &.path {
-        background-color: $path_clr;
+    &.visited {
+        animation: visited 0.4s ease-in 0s 1 normal forwards;
     }
 
-    &.animate {
-        
+    &.path {
+        animation: 0.5s ease-in 0s path;
+        animation-fill-mode: forwards;
+    }
+
+}
+
+@keyframes visited {
+    0% {
+        background-color: inherit;
+    }
+
+    100% {
+        background-color: $visit_clr;
+    }
+}
+
+@keyframes path {
+    0% {
+        background-color: inherit;
+    }
+
+    100% {
+        background-color: $path_clr;
     }
 }
