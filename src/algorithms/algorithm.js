@@ -23,6 +23,7 @@ class Algorithms {
 
             let neighbors = get_neighbor(graph, node);
             for (const neighbor of neighbors) {
+                console.log(neighbor.length);
                 const dist = node.distance + neighbor.length;
                 if (dist < neighbor.distance) {
                     neighbor.distance = dist;
@@ -63,7 +64,7 @@ class Algorithms {
                     neighbor.distance = dist;
                     neighbor.prev = node;
                     neighbor.visited = true;
-                    q.enqueue(neighbor, heuristic(neighbor, end));
+                    q.enqueue(neighbor, heuristic(neighbor, end) + neighbor.length);
                 }
             }
         }

@@ -32,6 +32,7 @@ class App extends React.Component {
             </NavDropdown>
             <Button className="mx-auto" variant="outline-success" onClick={this.handleVisualize}>Visualize</Button>
             <Button className="mx-auto" variant="outline-success" onClick={this.handleClear}>Clear</Button>
+            <Button className="mx-auto" variant="outline-success" onClick={this.handleWeight}>Random Weights</Button>
           </Nav>
         </Navbar>        
         <Graph ref={this.graph_ref}></Graph>
@@ -58,6 +59,10 @@ class App extends React.Component {
     if(!window.GLOBAL.animate) {
       this.graph_ref.current.clear();
     }
+  }
+
+  handleWeight = (e) => {
+    this.graph_ref.current.generateWeight();
   }
 
 }

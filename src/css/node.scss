@@ -26,12 +26,28 @@
     }
 
     &.visited {
-        animation: visited 0.4s ease-in 0s 1 normal forwards;
+        animation: visited 0.4s ease-in 0s 1 normal backwards;
     }
 
     &.path {
         animation: 0.5s ease-in 0s path;
         animation-fill-mode: forwards;
+    }
+
+    &.light {
+        background-color: $w-light;
+    }
+
+    &.medium {
+        background-color: $w-med;
+    }
+
+    &.heavy {
+        background-color: $w-heavy;
+    }
+
+    &.insane {
+        background-color: $w-insane;    
     }
 
 }

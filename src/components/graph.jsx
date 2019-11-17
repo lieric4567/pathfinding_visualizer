@@ -3,6 +3,7 @@ import '../css/node.css';
 import '../css/grid.css';
 import Node from './node';
 import {Algorithms, Heuristic} from '../algorithms/algorithm';
+import {NoiseGen, GraphGen} from '../algorithms/generators';
 
 class Graph extends React.Component {
 
@@ -59,7 +60,7 @@ class Graph extends React.Component {
         if(window.GLOBAL.animated) {
             this.clearVisual();
         }
-        // const animate = algos.run_djikstra(this.graph, this.graph[0][0], this.graph[38][75])
+        // const animate = this.algos.run_djikstra(this.graph, this.graph[0][0], this.graph[38][75])
         let animate = this.algos.aStar(this.graph, this.graph[0][0], this.graph[38][75], this.h.euclidian);
         animate.animate(this.ref_array);
     }
@@ -69,8 +70,8 @@ class Graph extends React.Component {
         this.graph = graphInit(y_size, x_size);
         for(const row of this.ref_array) {
             for(const node of row) {
-                node.current.div_ref.current.classList.remove('visited');
-                node.current.div_ref.current.classList.remove('path');
+                node.current.div_ref.current.classList = ['node'];
+                node.current.div_ref.current.classList = ['node'];
                 node.current.setState({wall: false, isStart: false, isEnd: false});
             }
         }
@@ -91,6 +92,14 @@ class Graph extends React.Component {
                 node.current.div_ref.current.classList.remove('path');
             }
         }
+    }
+
+    generateWeight = () => {
+        const {y_size, x_size} = this.state;
+        const nGen = new NoiseGen(y_size, x_size);
+        nGen.perlin(this.graph);
+        nGen.applyWeight(this.graph, this.ref_array);
+        console.log(this.graph);
     }
 }
 
