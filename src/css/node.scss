@@ -6,7 +6,6 @@
     border: 1px solid $node_border;
     background-color: $node_background;
     box-sizing: border-box;
-    border-radius: 2px;
 
     &:hover {
         cursor: pointer;
@@ -26,7 +25,7 @@
     }
 
     &.visited {
-        animation: visited 0.4s ease-in 0s 1 normal backwards;
+        animation: visited 1s ease-in 0s 1 normal backwards;
     }
 
     &.path {
@@ -55,6 +54,14 @@
 @keyframes visited {
     0% {
         background-color: inherit;
+    }
+
+    30% {
+        background-color: #77C0F8;
+    }
+
+    50% {
+        background-color: #69e9b1;
     }
 
     100% {

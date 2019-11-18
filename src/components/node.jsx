@@ -33,8 +33,10 @@ class Node extends React.Component {
         if (!window.GLOBAL.animate){
             window.GLOBAL.mouse_down = true; 
             const {wall, isStart, isEnd} = this.state; 
-            if(!wall && !isStart && !isEnd) this.setState({wall: true});
-            this.props.onMD(this.props.y, this.props.x);
+            if(!wall && !isStart && !isEnd) {
+                this.setState({wall: true});
+                this.props.onMD(this.props.y, this.props.x);
+            }
         }
     }
 

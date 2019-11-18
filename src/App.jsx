@@ -16,7 +16,7 @@ class App extends React.Component {
     this.handleClear = this.handleClear.bind(this); 
     this.state = {
       dropdownTitle: "Djikstra",
-      algoIndex: null,
+      algoIndex: 1,
     };
   }
 
@@ -27,8 +27,8 @@ class App extends React.Component {
         <Navbar bg="light" expand="lg">
           <Nav variant="row">
             <NavDropdown ref={this.dropdown} className="order-0 static-width" title={dropdownTitle} id="basic-nav-dropdown">
-              <NavDropdown.Item active eventKey="0" onSelect={this.handleSelect}>Djikstra</NavDropdown.Item>
-              <NavDropdown.Item eventKey="1" onSelect={this.handleSelect}>A*</NavDropdown.Item>
+              <NavDropdown.Item eventKey="1" onSelect={this.handleSelect}>Djikstra</NavDropdown.Item>
+              <NavDropdown.Item eventKey="2" onSelect={this.handleSelect}>A*</NavDropdown.Item>
             </NavDropdown>
             <Button className="mx-auto" variant="outline-success" onClick={this.handleVisualize}>Visualize</Button>
             <Button className="mx-auto" variant="outline-success" onClick={this.handleClear}>Clear</Button>
@@ -41,7 +41,7 @@ class App extends React.Component {
   }
   
   handleSelect(key, e) {
-    const newTitle = this.algorithms[parseInt(key)];
+    const newTitle = this.algorithms[parseInt(key) - 1];
     this.setState({dropdownTitle: newTitle, algoIndex: parseInt(key)}); 
   }
 
@@ -62,7 +62,9 @@ class App extends React.Component {
   }
 
   handleWeight = (e) => {
-    this.graph_ref.current.generateWeight();
+    if(!window.GLOBAL.animate) {
+      this.graph_ref.current.generateWeight();
+    }
   }
 
 }

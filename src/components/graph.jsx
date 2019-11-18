@@ -58,10 +58,9 @@ class Graph extends React.Component {
 
     runAlgorithm(props) {
         if(window.GLOBAL.animated) {
-            this.clearVisual();
+            this.clearAnimation();
         }
-        // const animate = this.algos.run_djikstra(this.graph, this.graph[0][0], this.graph[38][75])
-        let animate = this.algos.aStar(this.graph, this.graph[0][0], this.graph[38][75], this.h.euclidian);
+        let animate = this.algos.run(this.graph, this.graph[0][0], this.graph[38][75], this.h.euclidian, props.algorithm);
         animate.animate(this.ref_array);
     }
 
@@ -82,19 +81,38 @@ class Graph extends React.Component {
             for(const node of row) {
                 const {x, y} = node.current.props;
                 const temp = this.graph[y][x];
+                if (temp.isWall) continue;
                 this.graph[y][x] = {
                     ...temp,
                     visited: false,
                     prev: null,
                     distance: Infinity
                 }
-                node.current.div_ref.current.classList.remove('visited');
+                node.current.div_ref.current.classList = ['node'];
+                node.current.div_ref.current.classList = ['node'];
+            }
+        }
+    }
+
+    clearAnimation= () => {
+        for(const row of this.ref_array) {
+            for(const node of row) {
+                const {x, y} = node.current.props;
+                const temp = this.graph[y][x];
+                this.graph[y][x] = {
+                    ...temp,
+                    visited: false,
+                    prev: null,
+                    distance: Infinity
+                }
                 node.current.div_ref.current.classList.remove('path');
+                node.current.div_ref.current.classList.remove('visited');
             }
         }
     }
 
     generateWeight = () => {
+        this.clearVisual();
         const {y_size, x_size} = this.state;
         const nGen = new NoiseGen(y_size, x_size);
         nGen.perlin(this.graph);

@@ -3,6 +3,15 @@ export {Algorithms, Animate, Heuristic};
 
 class Algorithms {
 
+    run = (graph, start, end, h, algo) => {
+        if (algo === 1) {
+            return this.run_djikstra(graph, start, end);
+        }
+        if (algo === 2) {
+            return this.aStar(graph, start, end, h);
+        }
+    }
+
     run_djikstra(graph, start, end) { 
         const visited = [];
         let shortest = null; 
@@ -16,10 +25,6 @@ class Algorithms {
 
             start.visited = true;
             visited.push(node);
-            if (node === end) {
-                shortest = back_trace(node); 
-                break;
-            }
 
             let neighbors = get_neighbor(graph, node);
             for (const neighbor of neighbors) {
@@ -33,7 +38,8 @@ class Algorithms {
                 }
             }
         }
-        
+
+        shortest = back_trace(end); 
         return new Animate(visited, shortest);
     }
 
@@ -104,6 +110,8 @@ class Animate {
     animate_shortest = (ref) => {
         console.log('shortest')
         if(this.shortest == null) {
+            window.GLOBAL.animate = false;
+            window.GLOBAL.animated = true;
             return; 
         }
         let iter = 1;

@@ -1,11 +1,10 @@
 .node {
   width: 24px;
   height: 24px;
-  border: 1px solid #b4bcad;
-  background-color: #cdedc9;
+  border: 1px solid #94dcdf;
+  background-color: #f5f5f5;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  border-radius: 2px;
 }
 
 .node:hover {
@@ -26,8 +25,8 @@
 }
 
 .node.visited {
-  -webkit-animation: visited 0.4s ease-in 0s 1 normal backwards;
-          animation: visited 0.4s ease-in 0s 1 normal backwards;
+  -webkit-animation: visited 1s ease-in 0s 1 normal backwards;
+          animation: visited 1s ease-in 0s 1 normal backwards;
 }
 
 .node.path {
@@ -38,24 +37,30 @@
 }
 
 .node.light {
-  background-color: #e0edc9;
+  background-color: #b3f283;
 }
 
 .node.medium {
-  background-color: #ede3c9;
+  background-color: #d8d55c;
 }
 
 .node.heavy {
-  background-color: #edd4c9;
+  background-color: #f2b44f;
 }
 
 .node.insane {
-  background-color: #ea7979;
+  background-color: #ff925a;
 }
 
 @-webkit-keyframes visited {
   0% {
     background-color: inherit;
+  }
+  30% {
+    background-color: #77C0F8;
+  }
+  50% {
+    background-color: #69e9b1;
   }
   100% {
     background-color: #c0ede6;
@@ -65,6 +70,12 @@
 @keyframes visited {
   0% {
     background-color: inherit;
+  }
+  30% {
+    background-color: #77C0F8;
+  }
+  50% {
+    background-color: #69e9b1;
   }
   100% {
     background-color: #c0ede6;
@@ -76,7 +87,7 @@
     background-color: inherit;
   }
   100% {
-    background-color: #d9e074;
+    background-color: #FFFF00;
   }
 }
 
@@ -85,7 +96,7 @@
     background-color: inherit;
   }
   100% {
-    background-color: #d9e074;
+    background-color: #FFFF00;
   }
 }
 /*# sourceMappingURL=node.css.map */
