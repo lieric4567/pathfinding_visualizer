@@ -23,8 +23,8 @@ class App extends React.Component {
   render() {
     const {dropdownTitle} = this.state;
     return (
-      <div>
-        <Navbar bg="light" expand="lg">
+      <div className="wrapper">
+        <Navbar className="nav-wide" bg="light" expand="lg">
           <Nav variant="row">
             <NavDropdown ref={this.dropdown} className="order-0 static-width" title={dropdownTitle} id="basic-nav-dropdown">
               <NavDropdown.Item eventKey="1" onSelect={this.handleSelect}>Djikstra</NavDropdown.Item>
@@ -33,6 +33,7 @@ class App extends React.Component {
             <Button className="mx-auto" variant="outline-success" onClick={this.handleVisualize}>Visualize</Button>
             <Button className="mx-auto" variant="outline-success" onClick={this.handleClear}>Clear</Button>
             <Button className="mx-auto" variant="outline-success" onClick={this.handleWeight}>Random Weights</Button>
+            <Button className="mx-auto" variant="outline-success" onClick={this.handleGraph}>Random Maze</Button>
           </Nav>
         </Navbar>        
         <Graph ref={this.graph_ref}></Graph>
@@ -64,6 +65,12 @@ class App extends React.Component {
   handleWeight = (e) => {
     if(!window.GLOBAL.animate) {
       this.graph_ref.current.generateWeight();
+    }
+  }
+
+  handleGraph = (e) => {
+    if(!window.GLOBAL.animate) {
+      this.graph_ref.current.generateMaze();
     }
   }
 

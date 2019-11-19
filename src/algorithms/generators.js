@@ -9,8 +9,92 @@ To generate different mazes we will use some maze generation algorithms.
 */
 
 class GraphGen {
-    backtracing = () => {
+    backtracing = (graph, ref) => {
+        const stack = [];
+        const unvisited = this.getUnvisited(graph, ref);
+        
+        stack.push(unvisited[0][0]);
+        let left = unvisited.length * unvisited[0].length;
+        let current = unvisited[0][0];
+        left--;
+        let iter = 1;
 
+        while(left > 0) {
+            current.visited = true; 
+            const neighbors = getNeighbors(unvisited, current.node);
+            if (neighbors.length > 0) {
+                let rand = Math.floor( (Math.random() * 100) % neighbors.length );
+                const neighbor = neighbors[rand];
+                neighbor.visited = true;
+                let {x, y} = neighbor.node;
+
+                if (x < current.node.x){
+                    x = current.node.x - 1;
+                }
+                else if(x > current.node.x ){
+                    x--;
+                }
+
+                if (y < current.node.y){
+                    y = current.node.y - 1;
+                }
+                else if (y > current.node.y) {
+                    y--;
+                }
+                
+                graph[y][x].isWall = false;
+                setTimeout((ref) => {
+                    ref.current.setState({wall: false});
+                }, 10 * iter, ref[y][x]);
+
+                stack.push(neighbor);
+                left--;
+            }
+            else {
+                current = stack.pop();
+            }
+            iter++;
+        }
+
+    }
+
+    getUnvisited = (graph, ref) => {
+        const unvisited = [];
+        let iter = 1;
+        for(let row = 0; row < graph.length; row ++) {
+            if (row % 2 === 1) {
+                for(const node of graph[row]) {
+                    const {x, y} = node;
+                    if(Math.random() > 0.1) {
+                        node.isWall = true;
+                        setTimeout((ref) => {
+                            ref.current.setState({wall: true});
+                        }, 10 * iter, ref[y][x]);
+                    }
+                }
+            }
+            else {
+                const temp = [];
+
+                for(let col = 0; col < graph[0].length; col += 2){
+                    temp.push({node: graph[row][col], visited: false});
+                    if(col + 1 < graph[0].length) {
+                        const node = graph[row][col + 1];
+                        const {x, y} = node;
+                        if(Math.random() > 0.1) {
+                            node.isWall = true;
+                            setTimeout((ref) => {
+                                ref.current.setState({wall: true});
+                            }, 10 * iter, ref[y][x]);
+                        }
+                    }
+                }
+
+                unvisited.push(temp); 
+            }
+        }
+
+        return unvisited;
     }
 }
 
@@ -81,20 +165,20 @@ class NoiseGen {
                 const cur = this.values[row][col];
 
                 if (cur > 0 && cur <= 0.25){
-                    graph[row][col].length = 10;
+                    graph[row][col].length = 100;
                     ref[row][col].current.div_ref.current.classList.add('light');
                 }
                 else if (cur > 0.25 && cur <= 0.50){
-                    graph[row][col].length = 30;
+                    graph[row][col].length = 200;
                     ref[row][col].current.div_ref.current.classList.add('medium');
                 }
 
                 else if (cur > 0.50 && cur <= 0.75){
-                    graph[row][col].length = 80;
+                    graph[row][col].length = 300;
                     ref[row][col].current.div_ref.current.classList.add('heavy');
                 }
                 else if (cur > 0.75){
-                    graph[row][col].length = 100;
+                    graph[row][col].length = 400;
                     ref[row][col].current.div_ref.current.classList.add('insane');
                 }
             }
@@ -113,4 +197,16 @@ class NoiseGen {
         return (dx*this.gradient[y1][x1][0] + dy*this.gradient[y1][x1][1]);
     }
 
+}
+
+const getNeighbors = (graph, node) => {
+    let {x, y} = node;
+    x = x / 2;
+    y = y / 2;
+    const neighbors = [];
+    if( y > 0) neighbors.push(graph[y - 1][x]); //top
+    if( y < graph.length - 1) neighbors.push(graph[y + 1][x]); //bottom
+    if( x > 0) neighbors.push(graph[y][x - 1]);
+    if( x < graph[0].length - 1) neighbors.push(graph[y][x + 1]);
+    return neighbors.filter(neighbor => !neighbor.visited);
 }

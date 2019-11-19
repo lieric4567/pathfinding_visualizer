@@ -15,7 +15,7 @@ class Graph extends React.Component {
         this.handleMouseOver = this.handleMouseOver.bind(this);
         this.state = {
             y_size: 39,
-            x_size: 76,
+            x_size: 75,
             startSet: false,
             endSet: false,
         };
@@ -60,7 +60,7 @@ class Graph extends React.Component {
         if(window.GLOBAL.animated) {
             this.clearAnimation();
         }
-        let animate = this.algos.run(this.graph, this.graph[0][0], this.graph[38][75], this.h.euclidian, props.algorithm);
+        let animate = this.algos.run(this.graph, this.graph[0][0], this.graph[38][74], this.h.euclidian, props.algorithm);
         animate.animate(this.ref_array);
     }
 
@@ -118,6 +118,12 @@ class Graph extends React.Component {
         nGen.perlin(this.graph);
         nGen.applyWeight(this.graph, this.ref_array);
         console.log(this.graph);
+    }
+
+    generateMaze = () => {
+        this.clearVisual();
+        const mGen = new GraphGen ();
+        mGen.backtracing(this.graph, this.ref_array);
     }
 }
 
