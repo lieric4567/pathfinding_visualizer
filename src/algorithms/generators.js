@@ -119,7 +119,7 @@ class NoiseGen {
         Generates perlin noise to populate graph with weights
         */
 
-        let zoom = 0.4;
+        let zoom = 0.1;
         console.log('generating weights');
         for (let row=0 ; row < graph.length; row++) {
             this.values[row] = [];
@@ -148,10 +148,10 @@ class NoiseGen {
                     let ix1 = this.lerp(n0, n1, zoom);
                     
                     value += this.lerp(ix0, ix1, zoom) * amplitude;
-                    amplitude *= 0.15;
+                    amplitude *= 0.2;
                 }
 
-                this.values[row].push(Math.abs(value));
+                this.values[row].push(Math.abs(value) );
             }
         }
         console.log(this.values);

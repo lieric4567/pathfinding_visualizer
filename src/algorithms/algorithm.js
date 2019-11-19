@@ -10,6 +10,17 @@ class Algorithms {
         if (algo === 2) {
             return this.aStar(graph, start, end, h);
         }
+        if (algo === 3) {
+            return this.BreadthFirst(graph, start, end);
+        }
+        if (algo === 4) {
+            //Depth fist search
+            return this.depthFirst(graph, start, end);
+        }
+        else {
+            //default to djikstra
+            return this.run_djikstra(graph, start, end);
+        }
     }
 
     run_djikstra(graph, start, end) { 
@@ -23,7 +34,7 @@ class Algorithms {
             const node = q.dequeue();
             if (node.isWall) break;
 
-            start.visited = true;
+            node.visited = true;
             visited.push(node);
 
             let neighbors = get_neighbor(graph, node);
@@ -55,7 +66,7 @@ class Algorithms {
             const node = q.dequeue();
 
             if (node.isWall) break;
-            start.visited = true;
+            node.visited = true;
             visited.push(node);
 
             if(node === end) {
@@ -71,6 +82,62 @@ class Algorithms {
                     neighbor.prev = node;
                     neighbor.visited = true;
                     q.enqueue(neighbor, heuristic(neighbor, end) + neighbor.length);
+                }
+            }
+        }
+
+        return new Animate(visited, shortest);
+    };
+
+    BreadthFirst = (graph, start, end) => {
+        const q = new PriorityQueue();
+        const visited = [];
+        let shortest = null;
+        let iter = 1;
+        
+        q.enqueue(start, iter); iter++;
+        
+        while(!q.isEmpty()) {
+            const cur = q.dequeue();
+
+            if(cur.isWall) break;
+            cur.visited = true;
+            visited.push(cur);
+
+            const neighbors = get_neighbor(graph, cur);
+            
+            for (const neighbor of neighbors) {
+                neighbor.prev = cur;
+                neighbor.visited = true;
+                visited.push(neighbor);
+                q.enqueue(neighbor, iter); iter++;
+            }
+        }
+
+        shortest = back_trace(end);
+        return new Animate(visited, shortest);
+    }; 
+
+    depthFirst = (graph, start, end) => {
+        const visited = [];
+        let shortest = null; 
+        const stack = [];
+        stack.push(start);
+
+        while(stack.length > 0) {
+            let cur = stack.pop();
+
+            if(cur.isWall) break;
+
+            if(cur === end) shortest = back_trace(cur);
+
+            if(!cur.visited) {
+                cur.visited = true;
+                visited.push(cur);
+                const neighbors = get_neighbor(graph, cur);
+                for(const neighbor of neighbors) {
+                    neighbor.prev = cur;
+                    stack.push(neighbor);
                 }
             }
         }
@@ -98,13 +165,13 @@ class Animate {
             setTimeout((ref) => {
                 console.log('animating')
                 ref.current.div_ref.current.classList.add('visited');
-            }, 5 * iter, ref[y][x]);
+            }, 7 * iter, ref[y][x]);
             iter++;
         }  
         console.log(iter);
         setTimeout((ref, func) => {
             func(ref);
-        }, (5 * iter), ref, this.animate_shortest);
+        }, (7 * iter), ref, this.animate_shortest);
     };
 
     animate_shortest = (ref) => {
@@ -150,6 +217,7 @@ const get_neighbor = (graph, node) => {
 };
 
 const back_trace = (node) => {
+    if(node.isWall) return null;
     const shortest_path = []
     let cur = node;
     while (cur != null) {
@@ -157,5 +225,5 @@ const back_trace = (node) => {
         cur = cur.prev;
     }  
     
-    return shortest_path.reverse();
+    return shortest_path.length === 0 ? null: shortest_path.reverse();
 };
