@@ -4,6 +4,7 @@
 .grid {
     @include flexCenter(column);
     user-select: none;
+    padding: 20px 0;
 }
 
 .row {

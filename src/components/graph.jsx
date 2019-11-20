@@ -14,7 +14,7 @@ class Graph extends React.Component {
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseOver = this.handleMouseOver.bind(this);
         this.state = {
-            y_size: 39,
+            y_size: 37,
             x_size: 75,
             startSet: false,
             endSet: false,
@@ -60,7 +60,7 @@ class Graph extends React.Component {
         if(window.GLOBAL.animated) {
             this.clearAnimation();
         }
-        let animate = this.algos.run(this.graph, this.graph[0][0], this.graph[38][74], this.h.euclidian, props.algorithm);
+        let animate = this.algos.run(this.graph, this.graph[0][0], this.graph[36][74], this.h.euclidian, props.algorithm);
         animate.animate(this.ref_array);
     }
 

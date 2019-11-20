@@ -8,11 +8,14 @@
 .static-width {
   text-align: center;
   width: 105px;
-  border: 1px solid lightblue;
-  border-radius: 4px;
 }
 
 .nav-wide {
   width: 100%;
+}
+
+.bold {
+  font-size: 1.1em;
+  font-weight: 600;
 }
 /*# sourceMappingURL=navbar.css.map */

@@ -24,18 +24,18 @@ class App extends React.Component {
     const {dropdownTitle} = this.state;
     return (
       <div className="wrapper">
-        <Navbar className="nav-wide" bg="light" expand="lg">
+        <Navbar className="nav-wide" bg="dark" variant="dark" expand="lg">
           <Nav variant="row">
-            <NavDropdown ref={this.dropdown} className="order-0 static-width" title={dropdownTitle} id="basic-nav-dropdown">
+            <NavDropdown ref={this.dropdown} className="order-0 static-width bold" title={dropdownTitle} id="basic-nav-dropdown">
               <NavDropdown.Item eventKey="1" onSelect={this.handleSelect}>Djikstra</NavDropdown.Item>
               <NavDropdown.Item eventKey="2" onSelect={this.handleSelect}>A*</NavDropdown.Item>
               <NavDropdown.Item eventKey="3" onSelect={this.handleSelect}>Breadth First Search</NavDropdown.Item>
               <NavDropdown.Item eventKey="4" onSelect={this.handleSelect}>Depth First Search</NavDropdown.Item>
             </NavDropdown>
-            <Button className="mx-auto" variant="outline-success" onClick={this.handleVisualize}>Visualize</Button>
-            <Button className="mx-auto" variant="outline-success" onClick={this.handleClear}>Clear</Button>
-            <Button className="mx-auto" variant="outline-success" onClick={this.handleWeight}>Random Weights</Button>
-            <Button className="mx-auto" variant="outline-success" onClick={this.handleGraph}>Random Maze</Button>
+            <Nav.Link className="mx-auto bold"  onClick={this.handleVisualize}>Visualize</Nav.Link>
+            <Nav.Link className="mx-auto bold"  onClick={this.handleClear}>Clear</Nav.Link>
+            <Nav.Link className="mx-auto bold"  onClick={this.handleWeight}>Random Weights</Nav.Link>
+            <Nav.Link className="mx-auto bold"  onClick={this.handleGraph}>Random Maze</Nav.Link>
           </Nav>
         </Navbar>        
         <Graph ref={this.graph_ref}></Graph>
