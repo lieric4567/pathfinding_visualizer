@@ -73,6 +73,7 @@ class Graph extends React.Component {
     handleDrag = (prev_x, prev_y, x, y) => {
         const prev = this.graph[prev_y][prev_x];
         const node = this.graph[y][x];
+        if(node.isWall || node.isStart || node.isEnd) return; 
         if(prev.isStart) {
             prev.isStart = false;
             this.ref_array[prev_y][prev_x].current.setState({isStart: false});

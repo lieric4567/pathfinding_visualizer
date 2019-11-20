@@ -64,6 +64,7 @@ class GraphGen {
         for(let row = 0; row < graph.length; row ++) {
             if (row % 2 === 1) {
                 for(const node of graph[row]) {
+                    if(node.isStart || node.isEnd) continue;
                     const {x, y} = node;
                     if(Math.random() > 0.1) {
                         node.isWall = true;
@@ -80,6 +81,7 @@ class GraphGen {
                     temp.push({node: graph[row][col], visited: false});
                     if(col + 1 < graph[0].length) {
                         const node = graph[row][col + 1];
+                        if(node.isStart || node.isEnd) continue;
                         const {x, y} = node;
                         if(Math.random() > 0.1) {
                             node.isWall = true;
