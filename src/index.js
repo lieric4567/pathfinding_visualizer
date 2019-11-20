@@ -10,7 +10,11 @@ window.GLOBAL = {
     end: [8, 75],
     animate: false,
     animated: false,
+    dragging: false,
+    prev: null
 };
+
+window.cursor = 'pointer';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

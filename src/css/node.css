@@ -5,9 +5,6 @@
   background-color: #f5f5f5;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-}
-
-.node:hover {
   cursor: pointer;
 }
 
@@ -16,14 +13,6 @@
           animation: 0.4s ease-in 0s wall;
   -webkit-animation-fill-mode: both;
           animation-fill-mode: both;
-}
-
-.node.start {
-  background-color: #27a56d;
-}
-
-.node.end {
-  background-color: #8e2a1b;
 }
 
 .node.visited {
@@ -59,6 +48,14 @@
           animation: 0.5s ease-in 0s unwall;
   -webkit-animation-fill-mode: forwards;
           animation-fill-mode: forwards;
+}
+
+.node.start {
+  background-image: url("../icons/start.png");
+}
+
+.node.end {
+  background-image: url("../icons/end.png");
 }
 
 @-webkit-keyframes visited {

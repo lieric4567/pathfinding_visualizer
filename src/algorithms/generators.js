@@ -120,7 +120,6 @@ class NoiseGen {
         */
 
         let zoom = 0.1;
-        console.log('generating weights');
         for (let row=0 ; row < graph.length; row++) {
             this.values[row] = [];
             for (let col=0 ; col < graph[0].length; col++) {
@@ -154,7 +153,6 @@ class NoiseGen {
                 this.values[row].push(Math.abs(value) );
             }
         }
-        console.log(this.values);
     }
 
     applyWeight = (graph, ref) => {
@@ -165,20 +163,20 @@ class NoiseGen {
                 const cur = this.values[row][col];
 
                 if (cur > 0 && cur <= 0.25){
-                    graph[row][col].length = 100;
+                    graph[row][col].length = 1;
                     ref[row][col].current.div_ref.current.classList.add('light');
                 }
                 else if (cur > 0.25 && cur <= 0.50){
-                    graph[row][col].length = 200;
+                    graph[row][col].length = 2;
                     ref[row][col].current.div_ref.current.classList.add('medium');
                 }
 
                 else if (cur > 0.50 && cur <= 0.75){
-                    graph[row][col].length = 300;
+                    graph[row][col].length = 3;
                     ref[row][col].current.div_ref.current.classList.add('heavy');
                 }
                 else if (cur > 0.75){
-                    graph[row][col].length = 400;
+                    graph[row][col].length = 4;
                     ref[row][col].current.div_ref.current.classList.add('insane');
                 }
             }

@@ -24,6 +24,7 @@ class Algorithms {
     }
 
     run_djikstra(graph, start, end) { 
+        console.log('running djikstra');
         const visited = [];
         let shortest = null; 
         const q = new PriorityQueue();
@@ -39,11 +40,11 @@ class Algorithms {
 
             let neighbors = get_neighbor(graph, node);
             for (const neighbor of neighbors) {
-                console.log(neighbor.length);
                 const dist = node.distance + neighbor.length;
                 if (dist < neighbor.distance) {
                     neighbor.distance = dist;
                     neighbor.prev = node;
+                    if(neighbor === end) console.log(neighbor);
                     neighbor.visited = true;
                     q.enqueue(neighbor, neighbor.distance);
                 }
@@ -76,12 +77,13 @@ class Algorithms {
             
             const neighbors = get_neighbor(graph, node);
             for(const neighbor of neighbors) {
-                const dist = node.distance + neighbor.length + heuristic(neighbor, end);
+                const dist = node.distance + neighbor.length;
                 if (dist < neighbor.distance) {
                     neighbor.distance = dist;
+                    neighbor.fScore = dist + heuristic(neighbor, end);
                     neighbor.prev = node;
                     neighbor.visited = true;
-                    q.enqueue(neighbor, heuristic(neighbor, end) + neighbor.length);
+                    q.enqueue(neighbor, neighbor.fScore);
                 }
             }
         }
@@ -153,7 +155,6 @@ class Animate {
     }
 
     animate = (ref)=> {
-        console.log(this.visited, this.shortest);
         window.GLOBAL.animate = true;
         this.animate_visited(ref);
     };
@@ -163,19 +164,16 @@ class Animate {
         for (const node of this.visited) {
             const {x, y} = node;
             setTimeout((ref) => {
-                console.log('animating')
                 ref.current.div_ref.current.classList.add('visited');
             }, 7 * iter, ref[y][x]);
             iter++;
         }  
-        console.log(iter);
         setTimeout((ref, func) => {
             func(ref);
         }, (7 * iter), ref, this.animate_shortest);
     };
 
     animate_shortest = (ref) => {
-        console.log('shortest')
         if(this.shortest == null) {
             window.GLOBAL.animate = false;
             window.GLOBAL.animated = true;
@@ -200,8 +198,17 @@ class Animate {
 class Heuristic {
     
     euclidian = (start, end) => {
-        return Math.sqrt( ( Math.pow((end.x - start.x), 2) + Math.pow((end.y - start.y), 2) ) );
+        const x = end.x - start.x;
+        const y = end.y - start.y;
+
+        return Math.sqrt( (x*x + y*y) );
     }
+
+    manhattan = (start, end) => {
+        const x = Math.abs(end.x - start.x);
+        const y = Math.abs(end.y - start.y);
+        return  x + y;
+    }   
 
 }
 
@@ -218,12 +225,15 @@ const get_neighbor = (graph, node) => {
 
 const back_trace = (node) => {
     if(node.isWall) return null;
+    let cost = 0;
     const shortest_path = []
     let cur = node;
     while (cur != null) {
+        cost += cur.length;
         shortest_path.push(cur);
         cur = cur.prev;
     }  
-    
+    console.log(cost);
+
     return shortest_path.length === 0 ? null: shortest_path.reverse();
 };

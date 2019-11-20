@@ -49,7 +49,6 @@ class App extends React.Component {
   }
 
   handleVisualize(e) {
-    console.log(window.GLOBAL);
     if(!window.GLOBAL.animate) {
       const props = {
         algorithm: this.state.algoIndex,

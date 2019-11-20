@@ -16,8 +16,6 @@ class Graph extends React.Component {
         this.state = {
             y_size: 37,
             x_size: 75,
-            startSet: false,
-            endSet: false,
         };
         this.graph = graphInit(this.state.y_size, this.state.x_size);
         this.ref_array = nodeRefInit(this.state.y_size, this.state.x_size);
@@ -25,14 +23,14 @@ class Graph extends React.Component {
 
     render() {
         return (
-            <div className="grid">
+            <div className="grid" onMouseLeave={this.handleMouseLeave}>
                 {this.graph.map((row, row_num) => {
                     return (
                         <div className="row" id={row_num} key={row_num}>
                             {row.map( (node, col_num) => {
                                 return (
                                     <Node ref={this.ref_array[row_num][col_num]} key={col_num} x={node.x} y={node.y}
-                                        onMD={this.handleMouseDown} onMO={this.handleMouseOver}></Node>
+                                        onMD={this.handleMouseDown} onMO={this.handleMouseOver} onDrag={this.handleDrag}></Node>
                                 )
                             })}
                         </div>
@@ -46,6 +44,16 @@ class Graph extends React.Component {
         return false;
     }
 
+    componentDidMount() {
+        //Component rendered set the initial start, end point.
+        this.graph[19][15].isStart = true;
+        this.graph[19][60].isEnd = true;
+        this.start = {y: 19, x: 15};
+        this.end = {y: 19, x:60};
+        this.ref_array[this.start.y][this.start.x].current.setState({isStart: true});
+        this.ref_array[this.end.y][this.end.x].current.setState({isEnd: true });
+    }
+
     handleMouseDown(row, col) {
         this.graph[row][col].isWall = !this.graph[row][col].isWall;
     }
@@ -56,11 +64,36 @@ class Graph extends React.Component {
         }
     }
 
+    handleMouseLeave = (e) => {
+        window.GLOBAL.dragging = false; 
+        window.GLOBAL.prev = null;
+        window.GLOBAL.mouse_down = false;
+    }
+
+    handleDrag = (prev_x, prev_y, x, y) => {
+        const prev = this.graph[prev_y][prev_x];
+        const node = this.graph[y][x];
+        if(prev.isStart) {
+            prev.isStart = false;
+            this.ref_array[prev_y][prev_x].current.setState({isStart: false});
+            node.isStart = true;
+            this.ref_array[y][x].current.setState({isStart: true});
+            this.start = {x: node.x, y: node.y};
+        }
+        else {
+            prev.isEnd = false;
+            this.ref_array[prev_y][prev_x].current.setState({isEnd: false});
+            node.isEnd = true;
+            this.ref_array[y][x].current.setState({isEnd: true});
+            this.end = {x: node.x, y: node.y};
+        }
+    }
+
     runAlgorithm(props) {
         if(window.GLOBAL.animated) {
             this.clearAnimation();
         }
-        let animate = this.algos.run(this.graph, this.graph[0][0], this.graph[36][74], this.h.euclidian, props.algorithm);
+        let animate = this.algos.run(this.graph, this.graph[this.start.y][this.start.x], this.graph[this.end.y][this.end.x], this.h.manhattan, props.algorithm);
         animate.animate(this.ref_array);
     }
 
@@ -70,8 +103,10 @@ class Graph extends React.Component {
         for(const row of this.ref_array) {
             for(const node of row) {
                 node.current.div_ref.current.classList = ['node'];
-                node.current.div_ref.current.classList = ['node'];
-                node.current.setState({wall: false, isStart: false, isEnd: false});
+                const state = {wall: false, isStart: false, isEnd: false};
+                if(node.isStart) state.isStart = true;
+                if(node.isEnd) state.isEnd = true;
+                node.current.setState(state);
             }
         }
     };
@@ -88,8 +123,10 @@ class Graph extends React.Component {
                     prev: null,
                     distance: Infinity
                 }
-                node.current.div_ref.current.classList = ['node'];
-                node.current.div_ref.current.classList = ['node'];
+                node.current.div_ref.current.classList.remove('light');
+                node.current.div_ref.current.classList.remove('medium');
+                node.current.div_ref.current.classList.remove('heavy');
+                node.current.div_ref.current.classList.remove('insane');
             }
         }
     }
@@ -103,7 +140,8 @@ class Graph extends React.Component {
                     ...temp,
                     visited: false,
                     prev: null,
-                    distance: Infinity
+                    distance: Infinity,
+                    fScore: Infinity
                 }
                 node.current.div_ref.current.classList.remove('path');
                 node.current.div_ref.current.classList.remove('visited');
@@ -117,7 +155,6 @@ class Graph extends React.Component {
         const nGen = new NoiseGen(y_size, x_size);
         nGen.perlin(this.graph);
         nGen.applyWeight(this.graph, this.ref_array);
-        console.log(this.graph);
     }
 
     generateMaze = () => {
@@ -133,9 +170,12 @@ const createNode = (row, col) => {
         x: col,
         length: 1,
         distance: Infinity,
+        fScore: Infinity,
         isWall: false,
         visited: false,
         prev: null,
+        isStart: false,
+        isEnd: false
     };
 };
 
