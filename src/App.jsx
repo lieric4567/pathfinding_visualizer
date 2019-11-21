@@ -33,7 +33,8 @@ class App extends React.Component {
               <NavDropdown.Item eventKey="4" onSelect={this.handleSelect}>Depth First Search</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link className="mx-auto bold"  onClick={this.handleVisualize}>Visualize</Nav.Link>
-            <Nav.Link className="mx-auto bold"  onClick={this.handleClear}>Clear</Nav.Link>
+            <Nav.Link className="mx-auto bold"  onClick={this.handleClear}>Clear All</Nav.Link>
+            <Nav.Link className="mx-auto bold"  onClick={this.handleClearWalls}>Clear Walls</Nav.Link>
             <Nav.Link className="mx-auto bold"  onClick={this.handleWeight}>Random Weights</Nav.Link>
             <Nav.Link className="mx-auto bold"  onClick={this.handleGraph}>Random Maze</Nav.Link>
           </Nav>
@@ -72,6 +73,12 @@ class App extends React.Component {
   handleGraph = (e) => {
     if(!window.GLOBAL.animate) {
       this.graph_ref.current.generateMaze();
+    }
+  }
+
+  handleClearWalls = (e) => {
+    if(!window.GLOBAL.animate) {
+      this.graph_ref.current.clearWalls();
     }
   }
 

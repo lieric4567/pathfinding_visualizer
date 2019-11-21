@@ -101,13 +101,24 @@ class Graph extends React.Component {
     clear= ()=> {
         const {x_size, y_size} = this.state; 
         this.graph = graphInit(y_size, x_size);
-        for(const row of this.ref_array) {
+        this.graph[this.start.y][this.start.x].isStart = true;
+        this.graph[this.end.y][this.end.x].isEnd = true;
+        for(const row of this.graph) {
             for(const node of row) {
-                node.current.div_ref.current.classList = ['node'];
+                const {x, y} = node;
                 const state = {wall: false, isStart: false, isEnd: false};
-                if(node.isStart) state.isStart = true;
-                if(node.isEnd) state.isEnd = true;
-                node.current.setState(state);
+                if(node.isStart) {
+                    state.isStart = true;
+                    this.ref_array[y][x].current.div_ref.current.classList = ['node start'];
+                }
+                else if(node.isEnd) {
+                    state.isEnd = true;
+                    this.ref_array[y][x].current.div_ref.current.classList = ['node end'];
+                }
+                else {
+                    this.ref_array[y][x].current.div_ref.current.classList = ['node'];
+                }
+                this.ref_array[y][x].current.setState(state);
             }
         }
     };
@@ -128,6 +139,17 @@ class Graph extends React.Component {
                 node.current.div_ref.current.classList.remove('medium');
                 node.current.div_ref.current.classList.remove('heavy');
                 node.current.div_ref.current.classList.remove('insane');
+            }
+        }
+    }
+
+    clearWalls = () => {
+        for (const row of this.graph) {
+            for (const node of row) {
+                if (node.isWall) {
+                    node.isWall = false;
+                    this.ref_array[node.y][node.x].current.setState({wall: false});
+                }
             }
         }
     }
